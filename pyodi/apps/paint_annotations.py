@@ -143,7 +143,10 @@ def paint_annotations(
                 colors.append(color)
 
                 if show_label:
+                    size = annotation.get("size", None)
                     label_text = f"{annotation['id']}"
+                    if size:
+                        label_text += f"\n{size} mm"
                     if predictions_file is not None:
                         label_text += f": {score:.2f}"
 
