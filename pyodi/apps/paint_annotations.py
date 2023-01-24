@@ -25,9 +25,10 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Dict, Optional
 
-import numpy as np
+# import numpy as np
 from loguru import logger
-from matplotlib import cm as cm
+
+# from matplotlib import cm as cm
 from matplotlib import pyplot as plt
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import Polygon
@@ -73,9 +74,9 @@ def paint_annotations(
         Path(x["file_name"]).stem: x["id"] for x in ground_truth["images"]
     }
 
-    category_id_to_label = {
-        cat["id"]: cat["name"] for cat in ground_truth["categories"]
-    }
+    # category_id_to_label = {
+    #     cat["id"]: cat["name"] for cat in ground_truth["categories"]
+    # }
     image_id_to_annotations: Dict = defaultdict(list)
     if predictions_file is not None:
         with open(predictions_file) as pred:
@@ -83,8 +84,8 @@ def paint_annotations(
     else:
         annotations = ground_truth["annotations"]
 
-    n_colors = len(set(ann[color_key] for ann in annotations))
-    colormap = cm.rainbow(np.linspace(0, 1, n_colors))
+    # n_colors = len(set(ann[color_key] for ann in annotations))
+    colormap = ["green", "red"]  # cm.rainbow(np.linspace(0, 1, n_colors))
 
     for annotation in annotations:
         if not (filter_crowd and annotation.get("iscrowd", False)):
@@ -127,8 +128,8 @@ def paint_annotations(
                     continue
                 bbox_left, bbox_top, bbox_width, bbox_height = annotation["bbox"]
 
-                cat_id = annotation["category_id"]
-                label = category_id_to_label[cat_id]
+                # cat_id = annotation["category_id"]
+                # label = category_id_to_label[cat_id]
                 color_id = annotation[color_key]
                 color = colormap[color_id % len(colormap)]
 
@@ -142,7 +143,7 @@ def paint_annotations(
                 colors.append(color)
 
                 if show_label:
-                    label_text = f"{label}"
+                    label_text = f"{annotation['id']}"
                     if predictions_file is not None:
                         label_text += f": {score:.2f}"
 
@@ -153,6 +154,7 @@ def paint_annotations(
                         va="top",
                         ha="left",
                         bbox=dict(facecolor="white", edgecolor=color, alpha=0.5, pad=0),
+                        fontsize=40,
                     )
 
             p = PatchCollection(polygons, facecolor=colors, linewidths=0, alpha=0.3)
