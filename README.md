@@ -112,3 +112,24 @@ pyodi train-config evaluation \
 ## Contributing
 
 We appreciate all contributions to improve Pyodi. Please refer to [Contributing guide](.github/CONTRIBUTING.md) for more info.
+
+# Mussels!
+
+The boxes are created in Label Studio: http://34.76.204.121:8080/ We use [COCO format](https://opencv.org/introduction-to-the-coco-dataset/) for box annotation. The exported data archive contains images and JSON with annotations that link to the images like this:
+```
+{
+  "width": 1575,
+  "height": 2100,
+  "id": 39,
+  "file_name": "images/18/242085f1-rc-upload-1656041635388-12-TC-00151.jpg"
+}
+```
+The path in filename is incorrect, as it contains also the project ID (18 in this case) from the Label Studio. To remove the unnecessary part of the field, we can go with e.g.:
+```
+sed 's/images\/[0-9]\+\///' < result.json > coco.json
+```
+
+Now that the filepaths are correct, you can plot annotations like this from the dataset folder:
+```
+pyodi paint-annotations coco.json images output --use_exif_orientation
+```
