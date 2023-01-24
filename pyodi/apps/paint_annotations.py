@@ -121,6 +121,16 @@ def paint_annotations(
             polygons = []
             colors = []
 
+            ax.text(
+                50,
+                50,
+                f"image_id: {image_id}",
+                va="top",
+                ha="left",
+                bbox=dict(facecolor="white", alpha=0.1, pad=0),
+                fontsize=100,
+            )
+
             for annotation in image_id_to_annotations[image_id]:
 
                 score = annotation.get("score", 1)
@@ -144,7 +154,7 @@ def paint_annotations(
 
                 if show_label:
                     size = annotation.get("size", None)
-                    label_text = f"{annotation['id']}"
+                    label_text = f"id: {annotation['id']}"
                     if size:
                         label_text += f"\n{size} mm"
                     if predictions_file is not None:
